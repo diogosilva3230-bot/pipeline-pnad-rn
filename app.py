@@ -48,7 +48,8 @@ try:
         st.markdown(f'<div class="metric-box"><p style="color:#555;margin:0;">Total de Registros</p><h2 style="color:#2E7D32;margin:0;">{len(df_filtrado):,}</h2></div>', unsafe_allow_html=True)
     
     with col2:
-        total_ufs = df_filtrado['V0102'].nunique() if 'V0102' in df_filtrado.columns else 1
+        # Tenta usar a coluna 'UF', se não existir usa 1 por padrão
+        total_ufs = df_filtrado['UF'].nunique() if 'UF' in df_filtrado.columns else 1
         st.markdown(f'<div class="metric-box"><p style="color:#555;margin:0;">Estados Pesquisados</p><h2 style="color:#2E7D32;margin:0;">{total_ufs}</h2></div>', unsafe_allow_html=True)
         
     with col3:
@@ -57,17 +58,20 @@ try:
     st.write("---")
 
     # 3. Gráfico de Barras Ajustado (Mais Fino e Bonito)
-    st.subheader("Distribuição da Amostra por Código de UF")
+    st.subheader("Distribuição da Amostra por Estado (UF)")
+    
+    # Verifica qual o nome correto da coluna de Estado na sua base
+    coluna_uf = 'UF' if 'UF' in df_filtrado.columns else ('V0101' if 'V0101' in df_filtrado.columns else df_filtrado.columns[0])
     
     # Contagem por UF
-    df_uf = df_filtrado['V0102'].value_counts().reset_index()
-    df_uf.columns = ['Código UF', 'Quantidade']
-    df_uf['Código UF'] = df_uf['Código UF'].astype(str)
+    df_uf = df_filtrado[coluna_uf].value_counts().reset_index()
+    df_uf.columns = ['Estado (UF)', 'Quantidade']
+    df_uf['Estado (UF)'] = df_uf['Estado (UF)'].astype(str)
 
     # Criar o gráfico com largura definida para não esticar
     fig = px.bar(
         df_uf, 
-        x='Código UF', 
+        x='Estado (UF)', 
         y='Quantidade',
         color_discrete_sequence=['#2E7D32'],
         width=350,  # Mantém a barra fina como no exemplo do IF!
@@ -75,7 +79,7 @@ try:
     )
     
     fig.update_layout(
-        xaxis_title="Código UF",
+        xaxis_title="Estado (UF)",
         yaxis_title="Quantidade",
         bargap=0.2,
         plot_bgcolor='rgba(0,0,0,0)',
