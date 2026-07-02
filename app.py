@@ -31,12 +31,12 @@ try:
     st.sidebar.header("Filtros")
     
     # Filtro de Ano
-    anos disponíveis = sorted(df['Ano'].unique())
-    ano_selecionado = st.sidebar.selectbox("Selecione o Ano", anos disponíveis, index=len(anos disponíveis)-1)
+    anos_disponiveis = sorted(df['Ano'].unique())
+    ano_selecionado = st.sidebar.selectbox("Selecione o Ano", anos_disponiveis, index=len(anos_disponiveis)-1)
 
     # Filtro de Trimestre
-    trimestres disponíveis = sorted(df['Trimestre'].unique())
-    trimestre_selecionado = st.sidebar.selectbox("Selecione o Trimestre", trimestres disponíveis, index=0)
+    trimestres_disponiveis = sorted(df['Trimestre'].unique())
+    trimestre_selecionado = st.sidebar.selectbox("Selecione o Trimestre", trimestres_disponiveis, index=0)
 
     # Aplicar filtros
     df_filtrado = df[(df['Ano'] == ano_selecionado) & (df['Trimestre'] == trimestre_selecionado)]
